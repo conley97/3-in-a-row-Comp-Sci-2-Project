@@ -12,164 +12,201 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
+
+import java.lang.Math;
 import java.util.*;
 
+
 class Tile extends StackPane{
-		Circle tile = new Circle();
-		int row;
-		int col;
-		public Tile(int r, int c) {
-			tile.setRadius(50);
-			row = r;
-			col = c;
-			tile.setFill(Board.colors1[new Random().nextInt(Board.colors1.length)]);
-			tile.setStroke(Color.BLACK);
-			setAlignment(Pos.CENTER);
-			getChildren().addAll(tile);		
-			setOnMouseClicked(event ->{
-				if (Board.selected == null) {
-					Board.selected = this;
-					System.out.println(getX(this));
-					System.out.println(getY(this));
-				}else{
-					change(Board.selected, this);
-					checkState(col, row, this);
-					checkState(getX(Board.selected), getY(Board.selected), Board.selected);
-					Board.selected = null;
-				}
+	Circle tile = new Circle();
+	int row;
+	int col;
+	int z;
+	public Tile(int r, int c, int z) {
+		tile.setRadius(50);
+		this.row = r;
+		this.col = c;
+		this.z = z;
+		Text location = new Text("("+r +", "+ c+ ")" + "#" + Board.count + " Z = "+ z);
+		tile.setFill(Color.valueOf(Board.colors[z]));
+		tile.setStroke(Color.BLACK);
+		setAlignment(Pos.CENTER);
+		getChildren().addAll(tile, location);		
+		setOnMouseClicked(event ->{
+			if (Board.selected == null) {
+				Board.selected = this;
+				tile.setStroke(Color.BLUEVIOLET);
+				System.out.println(getX(this));
+				System.out.println(getY(this));
+			}else{
+				change(Board.selected, this);
+				
 
-			});
+			}
+
+		});
+	}
+	public void change(Tile a, Tile b) {
+		Paint temp = a.getColor();
+		a.setColor(b.getColor());
+		b.setColor(temp);
+	}
+	public Paint getColor() {
+		return tile.getFill();
+	}
+	public void setColor(Paint a){
+		tile.setFill(a);
+	}
+	public int getX(Tile a) {
+		return col;
+
+	}public int getY(Tile a) {
+		return row;
+
+	}
+	public int getZ() {
+		return z;
+
+	}
+	public int upMatch(int row, int col, Tile a, int matches) {
+		List<Tile> upmatches   = new ArrayList<>();
+	    
+	    
+	   
+	    Paint match = a.getColor();
+	    
+	    row--;
+	  
+	    while (row >= 0 && a.getColor() == match) {
+	      matches++;
+	      upmatches.add(Board.board[row][col]);
+	      row--;
+	    }  	
+	    	return matches;
+	  }
+	public void findandChangeMatch(int row, int column, Tile a) {
+		List<Tile> matches   = new ArrayList<>();
+		  int hmatches = 0;
+	    
+	 
+	  }
+
+}
+
+/*
+	public void checkState(int x, int y, Tile a) {
+
+		Tile[] same = new Tile[9];
+		Tile[] sameY = new Tile[9];
+		int count = 0;
+		Paint match = Board.board[y][x].getColor();
+		//CASE 1 X
+		//CASE 1 X
+		//CASE 1 X
+		try {
+			if(Board.board[y][x+1].getColor()==match && Board.board[y][x+2].getColor()==match){
+
+				same[0] = Board.board[y][x];
+				same[1] = Board.board[y][x+1];
+				same[2] = Board.board[y][x+2];
+				count =3;
+				extraHorizontal(same, count, match);
+
+			}
+		}catch(ArrayIndexOutOfBoundsException e) {
+
 		}
-		public void change(Tile a, Tile b) {
-			Paint temp = a.getColor();
-			a.setColor(b.getColor());
-			b.setColor(temp);
-		}
-		public Paint getColor() {
-			return tile.getFill();
-		}
-		public void setColor(Paint a){
-			tile.setFill(a);
-		}
-		public int getX(Tile a) {
-			return col;
+		//CASE 2 X
+		//CASE 2 X
+		//CASE 2 X
+		try {
+			if(Board.board[y][x-1].getColor()==match && Board.board[y][x+1].getColor()==match){
 
-		}public int getY(Tile a) {
-			return row;
+				same[0] = Board.board[y][x-1];
+				same[1] = Board.board[y][x];
+				same[2] = Board.board[y][x+1];
+				count =3; 
+				extraHorizontal(same, count, match);
+			}
+		}catch(ArrayIndexOutOfBoundsException e) {
 
 		}
-		public void checkState(int x, int y, Tile a) {
-			
-			Tile[] same = new Tile[9];
-			Tile[] sameY = new Tile[9];
-			int count = 0;
-			Paint match = Board.board[y][x].getColor();
-			//CASE 1 X
-			//CASE 1 X
-			//CASE 1 X
-			try {
-				if(Board.board[y][x+1].getColor()==match && Board.board[y][x+2].getColor()==match){
-					
-					same[0] = Board.board[y][x];
-					same[1] = Board.board[y][x+1];
-					same[2] = Board.board[y][x+2];
-					count =3;
-					extraHorizontal(same, count, match);
+		//CASE 3 X
+		//CASE 3 X
+		//CASE 3 X
+		try {
+			if(Board.board[y][x-1].getColor()==match && Board.board[y][x-2].getColor()==match){
 
-				}
-			}catch(ArrayIndexOutOfBoundsException e) {
+				same[0] = Board.board[y-2][x];
+				same[1] = Board.board[y-1][x];
+				same[2] = Board.board[y][x];
+				count =3; 
+				same = extraHorizontal(same, count, match);
+			}
+		}catch(ArrayIndexOutOfBoundsException e) {
+
+		}
+		//CASE 1 Y
+		//CASE 1 Y
+		//CASE 1 Y
+		try {
+			if(Board.board[y+1][x].getColor()==match && Board.board[y+2][x].getColor()==match){
+
+				sameY[0] = Board.board[y][x];
+				sameY[1] = Board.board[y+1][x];
+				sameY[2] = Board.board[y+2][x];
+				count =3;
+				extraVerticle(sameY, count, match);
 
 			}
-			//CASE 2 X
-			//CASE 2 X
-			//CASE 2 X
-			try {
-				if(Board.board[y][x-1].getColor()==match && Board.board[y][x+1].getColor()==match){
-					
-					same[0] = Board.board[y][x-1];
-					same[1] = Board.board[y][x];
-					same[2] = Board.board[y][x+1];
-					count =3; 
-					extraHorizontal(same, count, match);
-				}
-			}catch(ArrayIndexOutOfBoundsException e) {
+		}catch(ArrayIndexOutOfBoundsException e) {
 
+		}
+		//CASE 2 Y
+		//CASE 2 Y
+		//CASE 2 Y
+		try {
+			if(Board.board[y-1][x].getColor()==match && Board.board[y+1][x].getColor()==match){
+
+				sameY[0] = Board.board[y-1][x];
+				sameY[1] = Board.board[y][x];
+				sameY[2] = Board.board[y+1][x];
+				count =3; 
+				extraVerticle(sameY, count, match);
 			}
-			//CASE 3 X
-			//CASE 3 X
-			//CASE 3 X
-			try {
-				if(Board.board[y][x-1].getColor()==match && Board.board[y][x-2].getColor()==match){
-					
-					same[0] = Board.board[y-2][x];
-					same[1] = Board.board[y-1][x];
-					same[2] = Board.board[y][x];
-					count =3; 
-					same = extraHorizontal(same, count, match);
-				}
-			}catch(ArrayIndexOutOfBoundsException e) {
+		}catch(ArrayIndexOutOfBoundsException e) {
 
+		}
+		//CASE 3 Y
+		//CASE 3 Y
+		//CASE 3 Y
+		try {
+			if(Board.board[y-1][x].getColor()==match && Board.board[y-2][x].getColor()==match){
+				sameY[0] = Board.board[y-2][x];
+				sameY[1] = Board.board[y-1][x];
+				sameY[2] = Board.board[y][x];
+				count =3; 
+				sameY = extraVerticle(sameY, count, match);
 			}
-			//CASE 1 Y
-			//CASE 1 Y
-			//CASE 1 Y
-			try {
-				if(Board.board[y+1][x].getColor()==match && Board.board[y+2][x].getColor()==match){
-					
-					sameY[0] = Board.board[y][x];
-					sameY[1] = Board.board[y+1][x];
-					sameY[2] = Board.board[y+2][x];
-					count =3;
-					extraVerticle(sameY, count, match);
+		}catch(ArrayIndexOutOfBoundsException e) {
 
-				}
-			}catch(ArrayIndexOutOfBoundsException e) {
-
-			}
-			//CASE 2 Y
-			//CASE 2 Y
-			//CASE 2 Y
-			try {
-				if(Board.board[y-1][x].getColor()==match && Board.board[y+1][x].getColor()==match){
-					
-					sameY[0] = Board.board[y-1][x];
-					sameY[1] = Board.board[y][x];
-					sameY[2] = Board.board[y+1][x];
-					count =3; 
-					extraVerticle(sameY, count, match);
-				}
-			}catch(ArrayIndexOutOfBoundsException e) {
-
-			}
-			//CASE 3 Y
-			//CASE 3 Y
-			//CASE 3 Y
-			try {
-				if(Board.board[y-1][x].getColor()==match && Board.board[y-2][x].getColor()==match){
-					sameY[0] = Board.board[y-2][x];
-					sameY[1] = Board.board[y-1][x];
-					sameY[2] = Board.board[y][x];
-					count =3; 
-					sameY = extraVerticle(sameY, count, match);
-				}
-			}catch(ArrayIndexOutOfBoundsException e) {
-
-			}
-			try {
+		}
+		try {
 			for(int i = 0; i < 25; i++) {
-				same[i].setColor(Board.colors1[new Random().nextInt(Board.colors1.length)]);
+				same[i].setColor(Board.colors[new Random().nextInt(Board.colors.length)]);
 			}
-			}catch(NullPointerException e) {
+		}catch(NullPointerException e) {
 
-			}
-			try {
-				for(int i = 0; i < 25; i++) {
-					sameY[i].setColor(Board.colors1[new Random().nextInt(Board.colors1.length)]);
-				}}catch(NullPointerException e) {
-
-				}
 		}
-	
+		try {
+			for(int i = 0; i < 25; i++) {
+				sameY[i].setColor(Board.colors[new Random().nextInt(Board.colors.length)]);
+			}}catch(NullPointerException e) {
+
+			}
+	}
+
 	public Tile[] extraHorizontal(Tile[] same, int count, Paint match) {
 		int c1 = same[0].getX(same[0]);
 		int c2 = same[2].getX(same[0]);
@@ -225,3 +262,4 @@ class Tile extends StackPane{
 
 
 }
+ */
