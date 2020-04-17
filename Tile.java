@@ -170,6 +170,8 @@ class Tile extends StackPane{
 				}
 		}
 	
+	
+	
 	public Tile[] extraHorizontal(Tile[] same, int count, Paint match) {
 		int c1 = same[0].getX(same[0]);
 		int c2 = same[2].getX(same[0]);
@@ -222,6 +224,60 @@ class Tile extends StackPane{
 		}
 		return same;
 	}
-
-
+	
+	public int upMatch(int row, int column, Tile[] a) {
+	    int matches = 0;
+	    
+	    Paint match = Board.board[row][column].getColor();
+	    
+	    row--;
+	    while (row >= 0 && Board.board[row][column].getColor() == match) {
+	      matches++;
+	      row--;
+	    }
+	    return matches;
+	  }
+	
+	public int rightMatch(int row, int column, Tile[] a) {
+	     
+	    int matches = 0;
+	    
+	    Paint match = Board.board[row][column].getColor();
+	    
+	    column++;
+	    while (column >= 0 && Board.board[row][column].getColor() == match) {
+	      matches++;
+	      column++;
+	    }
+	    return matches;
+	   }
+	
+	public int leftMatch(int row, int column, Tile[] a) {
+	     
+	    int matches = 0;
+	    
+	    Paint match = Board.board[row][column].getColor();
+	    
+	    column--;
+	    while (column >= 0 && Board.board[row][column].getColor() == match) {
+	      matches++;
+	      column--;
+	    }
+	    return matches;
+	   }
+	
+	public int DownMatch(int row, int column, Tile[] a) {
+	     
+	    int matches = 0;
+	    
+	    Paint match = Board.board[row][column].getColor();
+	    
+	    row++;
+	    while (column >= 0 && Board.board[row][column].getColor() == match) {
+	      matches++;
+	      row++;
+	    }
+	    return matches;
+	   }
+	
 }
