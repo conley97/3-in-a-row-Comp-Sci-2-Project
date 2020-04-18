@@ -36,12 +36,18 @@ public class Board extends Application{
 		
 	}
 	public Parent creategame() {
+		Scoreboard scoreboard = new Scoreboard();
+		Stopwatch stopwatch = new Stopwatch();
+		scoreboard.setTranslateX(530);
+		scoreboard.setTranslateY(15);
+		stopwatch.setTranslateX(530);
+		stopwatch.setTranslateY(0);
 		Pane root = new Pane();
 		root.setPrefSize(800, 500);
+		root.getChildren().addAll(stopwatch, scoreboard);
 		for(int row = 0; row < 5; row++) {
 			for(int col = 0; col < 5; col++) {
-				board[row][col] =new Tile(row, col, boardHasNoMatches(row, col));
-				count++;
+				board[row][col] =new Tile(row, col, boardHasNoMatches(row, col), stopwatch, scoreboard);
 				board[row][col].setTranslateX(row * 100);
 				board[row][col].setTranslateY(col * 100);
 				root.getChildren().add(board[row][col]);
