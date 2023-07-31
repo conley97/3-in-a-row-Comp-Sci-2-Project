@@ -34,6 +34,3 @@ A fun and engaging 3 in a row desktop game inspired by Candy Crush, implemented 
 
 ## Contributing
 If you would like to contribute to this project, please feel free to fork the repository and submit a pull request.
-
-## License
-This project is licensed under the MIT License.
