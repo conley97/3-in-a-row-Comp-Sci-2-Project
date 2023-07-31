@@ -1,6 +1,6 @@
-# Candy Crush-like Game
+# Computer Science 2 Final Project
 
-A fun and engaging desktop game inspired by Candy Crush, implemented in Java using JavaFX. The game allows players to match three or more tiles of the same color in a row to score points. Players can enjoy smooth animations and a challenging gameplay experience.
+A fun and engaging 3 in a row desktop game inspired by Candy Crush, implemented in Java using JavaFX. The game allows players to match three or more tiles of the same color in a row to score points.
 
 ## Features
 - **Interactive Tiles**: Click and swap tiles to create matching combinations.
